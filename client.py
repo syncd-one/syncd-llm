@@ -117,3 +117,18 @@ class Documents:
             )
 
         return docs_retrieved
+
+class Chatbot:
+
+    def __init__(self, docs: Documents):
+        self.docs = docs
+        self.conversation_id = str(uuid.uuid4())
+
+    def generate_response(self, message: str):
+        response = co.chat(message=message, search_queries_only=True)
+
+        if response.search_queries:
+            print("Retrieving information...")
+            documents = self.retrieve_docs(response)
+
+    
