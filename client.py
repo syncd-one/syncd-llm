@@ -8,7 +8,7 @@ from typing import List, Dict
 from unstructured.partition.html import partition_html
 from unstructured.chunking.title import chunk_by_title
 
-co =  cohere.Client(os.environ['g8rkyTzW6QwzXaRDBQCVKIClLG8RfmP06GQZibdn'])
+co =  cohere.Client(os.environ[''])
 
 #https://txt.cohere.com/rag-chatbot/#step-by-step-guide
 
@@ -131,4 +131,112 @@ class Chatbot:
             print("Retrieving information...")
             documents = self.retrieve_docs(response)
 
-    
+            response = co.chat(
+                message=message,
+                documents=documents,
+                conversation_id=self.conversation_id,
+                stream=True,
+            )
+            for event in response:
+                yield event
+            yield response
+        else:
+            response = co.chat(
+                message=message, 
+                conversation_id=self.conversation_id, 
+                stream=True
+            )
+            for event in response:
+                yield event
+
+
+    def retrieve_docs(self, response) -> List[Dict[str, str]]:
+        """
+        Retrieves documents based on the search queries in the response.
+
+        Parameters:
+        response: The response object containing search queries.
+
+        Returns:
+        List[Dict[str, str]]: A list of dictionaries representing the retrieved documents.
+
+        """
+        # Get the query(s)
+        queries = []
+        for search_query in response.search_queries:
+            queries.append(search_query["text"])
+
+        # Retrieve documents for each query
+        retrieved_docs = []
+        for query in queries:
+            retrieved_docs.extend(self.docs.retrieve(query))
+
+        return retrieved_docs
+
+
+class App:
+
+    ...
+    ...
+
+    def run(self):
+
+        while True:
+            # Get the chatbot response
+            response = self.chatbot.generate_response(message)
+
+            # Print the chatbot response
+            print("Chatbot:")
+            citations_flag = False
+            
+            for event in response:
+                stream_type = type(event).__name__
+                
+                # Text
+                if stream_type == "StreamTextGeneration":
+                    print(event.text, end="")
+
+                # Citations
+                if stream_type == "StreamCitationGeneration":
+                    if not citations_flag:
+                        print("\n\nCITATIONS:")
+                        citations_flag = True
+                    print(event.citations[0])
+                    
+                # Documents
+                if citations_flag:
+                    if stream_type == "StreamingChat":
+                        print("\n\nDOCUMENTS:")
+                        documents = [{'id': doc['id'],
+                                    'text': doc['text'][:50] + '...',
+                                    'title': doc['title'],
+                                    'url': doc['url']} 
+                                    for doc in event.documents]
+                        for doc in documents:
+                            print(doc)
+
+            print(f"\n{'-'*100}\n")
+
+
+
+sources = [
+    {
+        "title": "Text Embeddings", 
+        "url": "https://docs.cohere.com/docs/text-embeddings"},
+    {
+        "title": "Similarity Between Words and Sentences", 
+        "url": "https://docs.cohere.com/docs/similarity-between-words-and-sentences"},
+    {
+        "title": "The Attention Mechanism", 
+        "url": "https://docs.cohere.com/docs/the-attention-mechanism"},
+    {
+        "title": "Transformer Models", 
+        "url": "https://docs.cohere.com/docs/transformer-models"}   
+]
+
+documents = Documents(sources)
+print(documents.docs)
+chatbot = Chatbot(documents)
+print(chatbot.docs.docs[0]["text"])
+app = App(chatbot)
+app.run()
