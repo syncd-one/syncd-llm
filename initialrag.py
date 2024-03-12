@@ -1,15 +1,17 @@
 import streamlit as st
-from sentence_transformers import SentenceTransformer
 import langchain
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from youtube_transcript_api import YouTubeTranscriptApi
 import os
-
+import getpass
+from langchain_community.llms import Cohere
+from langchain_core.messages import HumanMessage
 # **Step 0: You need to have pre-collected YouTube transcripts (replace '...' with file paths)**
-video_links = ["https://www.youtube.com/watch?v=xT8oP0wy-A0", "https://www.youtube.com/watch?v=ZUN3AFNiEgc", "https://www.youtube.com/watch?v=8KtDLu4a-EM"]
-
+video_links = ["https://www.youtube.com/watch?v=L-cv7UH3gLE", "https://www.youtube.com/watch?v=WDv4AWk0J3U", "https://www.youtube.com/watch?v=fChURwct1g0"]
+os.environ["COHERE_API_KEY"] = getpass.getpass()
+model = Cohere(model="command", max_tokens=256, temperature = 0.75)
 if os.path.exists('transcripts'):
     print('Directory already exists')
 else:
@@ -51,7 +53,7 @@ print((transcripts))
 vector_store = FAISS.from_documents(transcripts, embedding_model)
 
 # **Step 4: Streamlit Interface**
-st.title("YouTube Transcript Search")
+st.title("Syncd")
 user_query = st.text_input("Enter your question:")
 
 if user_query:
@@ -60,13 +62,14 @@ if user_query:
     print(type(query_embedding))
 
     # Find similar transcripts from the vector store
-    result = vector_store.similarity_search(user_query)
-    st.write(f"Found {len(result)} similar videos")
-    st.write(result[0])
+    result = vector_store.similarity_search(user_query, k=1)
+    summary_prompt = f"Summarize the following transcript in two or three sentences: {result[0]}"
+    transcript_summary_response = model(summary_prompt)
+    conversation_prompt = f"""The user asked: {user_query}
+    Here's a summary of the relevant video transcript: {transcript_summary_response}
+    Can you provide a helpful and informative answer to the user's question?"""
+    cohere_response=model(conversation_prompt)
+    st.write(cohere_response)
 
-    # Display results
-    # for video_id, similarity_score in result:
-    #     st.write(f"Video ID: {video_id}")
-    #     st.write(f"Transcript: {transcripts[video_id]}")
-    #     st.write(f"Similarity Score: {similarity_score}")
+
 
