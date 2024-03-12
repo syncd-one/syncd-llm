@@ -1,0 +1,15 @@
+How to train your ChatGPT
+
+Stage 1: Pretraining
+1. Download 10 TB of text
+2. Get a cluster of 6,000 GPUs
+3. Compress the text into a neural network, pay 2 million dollars, wait 12 days
+4. obtain base model
+
+Stage 2: Fine-tuning
+1. Write labeling instructions
+2. Hire people to collect 100K high quality ideal Q&A responses, and/or comparisons.
+3. Finetune base model on this data, wait ~1 day.
+4. Obtain assistant model
+5. Run a lot of evaluations.
+

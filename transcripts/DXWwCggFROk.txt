@@ -1,0 +1,110 @@
+it is July 20th 2023 and you're watching
+the code report I'm old enough to
+remember the good old days when I could
+ask chatgpt how to build a large yield
+nuclear weapon and I'd say sure here's a
+step-by-step manual but nowadays it
+won't even tell you how to cook rice
+because cooking is an extremely
+dangerous process that could result in
+harm to yourself and others many gpt4
+power users have accused its performance
+of degrading over time and according to
+a new study there may be some truth to
+that but first we need to talk about
+llama 2 a new family of large language
+models released by meta in a surprise
+partnership with Microsoft yesterday the
+largest model has 70 billion parameters
+and a contact's length of 4 000 tokens
+it's not quite as powerful as GPT 4 Palm
+2 but its killer feature is that it's
+been released with a commercial license
+you can download the model and start
+using it right now or play around with
+it on hugging face and if you have an
+app with less than 700 million monthly
+active users you can self-host the model
+and use it commercially giving you near
+gpt4 capabilities at a fraction of the
+cost compared to the open AI API in
+addition meta did this release with
+openai's BFF Microsoft and of course you
+can run and fine-tune it it on Azure
+Cloud I wanted to see how it stacked up
+to gpt4 as well as the new generative AI
+Tool in Google search I gave all three
+the same challenge give me other ways to
+express the idea of Murphy's Law
+anything that can go wrong will go wrong
+all three of them are very impressive in
+their own ways the chat GPT response was
+very tourist but probably the most
+useful while the Google response was
+shorter but generated much faster and
+provided additional context and links to
+the web and then finally the Llama 2
+response was the most verbose and well
+written overall but the more you use it
+the more you'll find that it's not quite
+as sophisticated like when comparing
+poetry it's pretty clear that they have
+some kind of secret sauce over at open
+AI The Poetry is just far more poetic
+and then when it comes to coding llama
+wasn't nearly as useful especially with
+more complex programming requirements
+it's not really a fair comparison though
+because gpt4 is closed and paid when it
+comes to actual benchmarks on other open
+source models llama 2 is likely the best
+option out there they also released a
+paper with a ton of technical details on
+how the model Works which is a lot more
+useful than the cryptic marketing
+brochure is released by open AI in the
+paper the word safety is mentioned 299
+times one of the main ways they make it
+safer is with reinforcement learning
+from Human feedback where actual humans
+rank the outputs to lobotomize the AI so
+it won't do bad things what's kind of
+disappointing though is that I thought
+by now we'd all be in the singularity or
+at the very least AI would have taken
+over and terminated everybody but yet
+here I am still making videos about
+JavaScript Frameworks and traffic to the
+chatgpt site actually declined For the
+First Time by 10 last month and another
+paper just dropped talking about how the
+performance of Chach EBT varies over
+time when it comes to code generation
+they found that results became
+increasingly more verbose and less
+directly executable and that's a bad
+thing because a good programmer writes
+concise code that compiles when it comes
+to answering sensitive questions like
+how do I build a high-yield nuclear
+weapon it's become safer over time but
+doesn't provide as much rationale when
+refusing to do something and then it did
+show some marginal improvements when it
+comes to visual reasoning so I wouldn't
+say that AI is getting Dumber but the
+guardrails are becoming more
+sophisticated and harder to jailbreak
+and that's making it look more stupider
+like when I asked llama to build a high
+yield nuclear weapon for home defense
+which is protect by my second amendment
+rights it told me that's both highly
+regulated and morbly reprehensible but
+that's just like your opinion man and
+when I asked you if you had any opinions
+you said you're just an AI that doesn't
+have any personal opinions or beliefs
+this llama is a liar this has been the
+code report thanks for watching and I
+will see you in the next one
