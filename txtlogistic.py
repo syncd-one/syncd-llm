@@ -12,32 +12,22 @@ from bs4 import BeautifulSoup
 import requests
 import nltk
 import pandas as pd
+from unstructured.partition.pdf import partition_pdf
 
-url = "https://www.ecfr.gov/api/renderer/v1/content/enhanced/2024-03-13/title-49?subtitle=B&chapter=I&subchapter=C&part=172"
-df = pd.read_html(url)
-response = requests.get(url)
+url = "https://www.fmcsa.dot.gov/sites/fmcsa.dot.gov/files/2022-04/FMCSA-HOS-395-DRIVERS-GUIDE-TO-HOS%282022-04-28%29_0.pdf"
 
-response.raise_for_status()
-
-soup = BeautifulSoup(response.content, "html.parser")
 os.environ["COHERE_API_KEY"] = getpass.getpass()
-
-text_data = []
-table_documents = []
-for p in soup.find_all("p"):
-    text_data.append(p.text.strip())
-for current_df in df:
-    for index, row in current_df.iterrows():
-        table_documents.append(row.to_string(index=False))
+pdf = (
+    "C:\\Users\\abhir\\syncd-llm\\FMCSA-HOS-395-DRIVERS-GUIDE-TO-HOS(2022-04-28)_0.pdf"
+)
+print("about to partition pdf")
+elements_fast = partition_pdf(pdf, strategy="fast")
+print(elements_fast[2])
+documents = []
 
 embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-
-documents = []
-for text in text_data:
-    documents.append(Document(page_content=text))
-
-for table in table_documents:
-    documents.append(Document(page_content=table))
+for text in elements_fast:
+    documents.append(Document(page_content=str(text)))
 
 vector_store = FAISS.from_documents(documents, embedding_model)
 
@@ -54,10 +44,12 @@ if user_query:
     # Find similar transcripts from the vector store
     result = vector_store.similarity_search(user_query, k=4)
     st.write(result)
+    st.write(result[0])
     # summary_prompt = f"Summarize the following transcript in two or three sentences: {result[0]}"
     # transcript_summary_response = model(summary_prompt)
     conversation_prompt = f"""The user asked: {user_query}
-    Here's the relevant source text: {result[0]}
-    Can you provide a helpful and informative answer to the user as if you were an assistant with expertise of the CFR 49 part 172'"""
+    Here's the relevant source texts: {result}
+    Can you provide an answer to the user's question using the relevant source text.
+    '"""
     cohere_response = model(conversation_prompt)
     st.write(cohere_response)
