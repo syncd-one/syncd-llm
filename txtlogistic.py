@@ -12,22 +12,40 @@ from bs4 import BeautifulSoup
 import requests
 import nltk
 import pandas as pd
-from unstructured.partition.pdf import partition_pdf
+#from unstructured.partition.pdf import partition_pdf
 
 url = "https://www.fmcsa.dot.gov/sites/fmcsa.dot.gov/files/2022-04/FMCSA-HOS-395-DRIVERS-GUIDE-TO-HOS%282022-04-28%29_0.pdf"
 
 os.environ["COHERE_API_KEY"] = getpass.getpass()
-pdf = (
-    "C:\\Users\\abhir\\syncd-llm\\FMCSA-HOS-395-DRIVERS-GUIDE-TO-HOS(2022-04-28)_0.pdf"
-)
-print("about to partition pdf")
-elements_fast = partition_pdf(pdf, strategy="fast")
-print(elements_fast[2])
+# pdf = (
+#     "C:\\Users\\abhir\\syncd-llm\\FMCSA-HOS-395-DRIVERS-GUIDE-TO-HOS(2022-04-28)_0.pdf"
+# )
+# print("about to partition pdf")
+# elements_fast = partition_pdf(pdf, strategy="fast")
+# print(elements_fast[2])
 documents = []
+hazardous_materials = "hazardous_materials1.txt"
+cfr49text = "cfr49text.txt"
+
+with open(hazardous_materials, "r", encoding="utf8") as file:
+    hazardous_materials_text = file.read()
+
+    lines = hazardous_materials_text.split("\n")
+    for line in lines:
+        documents.append(Document(page_content=line))
+
+with open(cfr49text, "r", encoding="utf8") as file:
+    cfr49text_text = file.read()
+
+    lines = cfr49text_text.split("\n")
+    for line in lines:
+        documents.append(Document(page_content=line))
+
 
 embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-for text in elements_fast:
-    documents.append(Document(page_content=str(text)))
+
+
+
 
 vector_store = FAISS.from_documents(documents, embedding_model)
 

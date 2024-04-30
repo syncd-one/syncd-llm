@@ -1,4 +1,3 @@
-How to train your ChatGPT
 
 Stage 1: Pretraining
 1. Download 10 TB of text
