@@ -47,7 +47,7 @@ def load_vector_store(_documents, _embedding_model):
 # Function to load Cohere model
 @st.cache_resource
 def load_cohere_model():
-    os.environ["COHERE_API_KEY"] = st.text_input("Enter your Cohere API key:")
+    os.environ["COHERE_API_KEY"] = st.secrets["COHERE_API_KEY"]
     return Cohere(model="command", max_tokens=512, temperature=0.75)
 
 # Load data
@@ -69,7 +69,7 @@ if user_query:
 
     conversation_prompt = f"""The user asked: {user_query}
     Here's the relevant source texts: {result}
-    Can you provide an answer to the user's question using the relevant source text.
+    Can you provide a professional and concise answer to the user's question using the relevant source text.
     '"""
     cohere_response = cohere_model(conversation_prompt)
     st.write(cohere_response)
