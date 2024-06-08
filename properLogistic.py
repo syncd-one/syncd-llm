@@ -56,7 +56,8 @@ embedding_model = load_embedding_model()
 vector_store = load_vector_store(documents, embedding_model)
 cohere_model = load_cohere_model()
 
-st.title("Logistics Copilot")
+st.title("CFR49 Copilot")
+st.write("Welcome! Please enter any questions you have about CFR49 part 172 and we will provide you with relevant information.")
 user_query = st.text_input("Enter your question:")
 
 if user_query:
